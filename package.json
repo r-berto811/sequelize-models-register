@@ -1,6 +1,6 @@
 {
   "name": "@r-berto811/sequelize-models-register",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Generate file with registred sequelize models",
   "main": "index.js",
   "directories": {

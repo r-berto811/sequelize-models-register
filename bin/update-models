@@ -3,7 +3,8 @@
 var program = require('commander')
 const updater = require('../index')
 const path = require('path')
- 
+const rootProjectPath = path.resolve(__dirname, '../../../../')
+
 program
   .version('0.1.0')
   .arguments('<dir> [outfile]')
@@ -14,15 +15,15 @@ program
   .action(function (dir, outfile, cmd) {
     const semicolons = cmd.semicolons || false
     const generation = cmd.generation || null
-    const modelsDir = path.resolve(__dirname, dir)
-    console.log(cmd.config ? path.resolve(__dirname, cmd.config) : null)
+    const modelsDir = path.resolve(rootProjectPath, dir)
+    console.log(cmd.config ? path.resolve(rootProjectPath, cmd.config) : null)
     console.log(`Scanning dir: ${modelsDir}`)
     updater({
-      configPath: cmd.config ? path.resolve(__dirname, cmd.config) : null,
+      configPath: cmd.config ? path.resolve(rootProjectPath, cmd.config) : null,
       modelsDir,
-      outputFile: path.resolve(__dirname, outfile),
+      outputFile: path.resolve(rootProjectPath, outfile),
       generation,
-      templatePath: cmd.template ? path.resolve(__dirname, cmd.template) : null,
+      templatePath: cmd.template ? path.resolve(rootProjectPath, cmd.template) : null,
       semicolons,
     })
   })
