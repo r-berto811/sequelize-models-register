@@ -1,0 +1,30 @@
+#!/usr/bin/env node
+
+var program = require('commander')
+const updater = require('../index')
+const path = require('path')
+ 
+program
+  .version('0.1.0')
+  .arguments('<dir> [outfile]')
+  .option('-s, --semicolons', 'Add semicolons')
+  .option('-g, --generation [name]', 'Generation of javascript')
+  .option('-t, --template [path]', 'Load custom template from file')
+  .option('-c, --config [path]', 'Set the database config file')
+  .action(function (dir, outfile, cmd) {
+    const semicolons = cmd.semicolons || false
+    const generation = cmd.generation || null
+    const modelsDir = path.resolve(__dirname, dir)
+    console.log(cmd.config ? path.resolve(__dirname, cmd.config) : null)
+    console.log(`Scanning dir: ${modelsDir}`)
+    updater({
+      configPath: cmd.config ? path.resolve(__dirname, cmd.config) : null,
+      modelsDir,
+      outputFile: path.resolve(__dirname, outfile),
+      generation,
+      templatePath: cmd.template ? path.resolve(__dirname, cmd.template) : null,
+      semicolons,
+    })
+  })
+  .parse(process.argv)
+

@@ -1,0 +1,2 @@
+sequelize-models-register
+========

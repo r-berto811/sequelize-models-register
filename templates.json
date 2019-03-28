@@ -1,0 +1,10 @@
+{
+  "es5": {
+    "default": "./templates/es5.tpl",
+    "semicolons": "./templates/es5-semi.tpl"
+  },
+  "es6": {
+    "default": "./templates/es6.tpl",
+    "semicolons": "./templates/es6-semi.tpl"
+  }
+}
