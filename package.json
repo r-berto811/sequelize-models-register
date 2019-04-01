@@ -1,6 +1,6 @@
 {
   "name": "@r-berto811/sequelize-models-register",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Generate file with registred sequelize models",
   "main": "index.js",
   "directories": {
@@ -25,5 +25,17 @@
   "bin": {
     "sequelize:register-models": "./bin/update-models"
   },
-  "homepage": "https://github.com/r-berto811/sequelize-models-register/"
+  "homepage": "https://github.com/r-berto811/sequelize-models-register/",
+  "engines": {
+    "node": ">=6.0.0"
+  },
+  "dependencies": {
+    "commander": "^2.19.0",
+    "lodash": "^4.17.11",
+    "sequelize": "4.x",
+    "sequelize-cli": "5.x"
+  },
+  "devDependencies": {
+    "standard": "^12.0.1"
+  }
 }

@@ -1,31 +1,69 @@
 #!/usr/bin/env node
 
-var program = require('commander')
+/**
+ * Import dependencies.
+ */
+const program = require('commander')
+const packageData = require('../package.json')
 const updater = require('../index')
 const path = require('path')
+const fs = require('fs')
 const rootProjectPath = path.resolve(__dirname, '../../../../')
 
-program
-  .version('0.1.0')
-  .arguments('<dir> [outfile]')
+/**
+ * Validate input require parameters.
+ * @param {object} param0 - Input options.
+ */
+function validateInputs ({ dir, configPath, templatePath }) {
+  validateFolders([dir])
+  validateFiles([templatePath, configPath])
+}
+
+/**
+ * Validate if paths in is a valid folder paths.
+ * @param {Array} paths
+ */
+function validateFolders (paths) {
+  for (const path of paths) {
+    if (!path) continue
+    if (!fs.statSync(path).isDirectory()) throw new Error(`${path} is not a valid folder`)
+  }
+}
+
+/**
+ * Validate if paths is a valid file paths.
+ * @param {Array} paths
+ */
+function validateFiles (paths) {
+  for (const path of paths) {
+    if (!path) continue
+    if (!fs.statSync(path).isFile()) throw new Error(`${path} is not a valid file`)
+  }
+}
+
+/**
+ * Initialize updater cli application with package.json version.
+ */
+const updaterCli = program
+  .version(packageData.version)
+  .arguments('<dir> <outfile>')
   .option('-s, --semicolons', 'Add semicolons')
   .option('-g, --generation [name]', 'Generation of javascript')
   .option('-t, --template [path]', 'Load custom template from file')
   .option('-c, --config [path]', 'Set the database config file')
   .action(function (dir, outfile, cmd) {
-    const semicolons = cmd.semicolons || false
-    const generation = cmd.generation || null
-    const modelsDir = path.resolve(rootProjectPath, dir)
-    console.log(cmd.config ? path.resolve(rootProjectPath, cmd.config) : null)
-    console.log(`Scanning dir: ${modelsDir}`)
-    updater({
+    validateInputs(Object.assign({ dir, outfile }, cmd))
+    updater.generate({
       configPath: cmd.config ? path.resolve(rootProjectPath, cmd.config) : null,
-      modelsDir,
+      modelsDir: path.resolve(rootProjectPath, dir),
       outputFile: path.resolve(rootProjectPath, outfile),
-      generation,
+      generation: cmd.generation || null,
       templatePath: cmd.template ? path.resolve(rootProjectPath, cmd.template) : null,
-      semicolons,
+      semicolons: cmd.semicolons || false
     })
   })
-  .parse(process.argv)
 
+/**
+ * Parse inputs.
+ */
+updaterCli.parse(process.argv)
